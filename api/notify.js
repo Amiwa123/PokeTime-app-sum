@@ -5,13 +5,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { playerIds, title, message, segment } = req.body;
+  const { playerIds, title, message } = req.body;
   if (!title || !message) return res.status(400).json({ error: 'Missing title or message' });
 
-  const OID = process.env.ONESIGNAL_APP_ID || 'ba106603-ca56-424d-a82d-564cde853c6b';
-  const OR = process.env.ONESIGNAL_REST_KEY;
-
-  if (!OR) return res.status(500).json({ error: 'OneSignal REST key not configured' });
+  const OID = 'ba106603-ca56-424d-a82d-564cde853c6b';
+  const OR = 'os_v2_app_xiigma6kkzbe3kbnkzgn5bj4nnydat3ibdxeum4maxa7ywunof6zpnmzkxgu3xri6da5zxaxqb3nnzp6hle6333zns57fm3zb6xn74a';
 
   try {
     const body = {
@@ -23,8 +21,10 @@ export default async function handler(req, res) {
     if (playerIds && playerIds.length > 0) {
       body.include_subscription_ids = playerIds;
     } else {
-      body.included_segments = [segment || 'All'];
+      body.included_segments = ['All'];
     }
+
+    console.log('Sending push:', JSON.stringify(body));
 
     const response = await fetch('https://api.onesignal.com/notifications', {
       method: 'POST',
