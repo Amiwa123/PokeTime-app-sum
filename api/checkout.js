@@ -21,7 +21,8 @@ export default async function handler(req, res) {
         currency: 'EUR',
         merchant_code: process.env.SUMUP_MERCHANT_CODE || 'MV7T4VHV',
         description: description || `Poketime Rueil #${String(orderNum).padStart(4,'0')}`,
-        return_url: returnUrl
+        redirect_url: returnUrl,
+        hosted_checkout: { enabled: true }
       })
     });
 
@@ -32,15 +33,12 @@ export default async function handler(req, res) {
       return res.status(response.status).json({ error: 'SumUp error', details: data });
     }
 
-    const checkoutId = data.id;
-    if (!checkoutId) {
-      return res.status(500).json({ error: 'No checkout ID returned', data });
+    const hostedCheckoutUrl = data.hosted_checkout_url;
+    if (!hostedCheckoutUrl) {
+      return res.status(500).json({ error: 'No hosted_checkout_url returned', data });
     }
 
-    return res.status(200).json({
-      checkoutId,
-      hostedCheckoutUrl: `https://pay.sumup.com/b2c/checkout/${checkoutId}`
-    });
+    return res.status(200).json({ hostedCheckoutUrl });
 
   } catch (error) {
     console.error('Error:', error);
