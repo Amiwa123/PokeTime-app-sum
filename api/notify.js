@@ -8,8 +8,8 @@ export default async function handler(req, res) {
   const { playerIds, title, message } = req.body;
   if (!title || !message) return res.status(400).json({ error: 'Missing title or message' });
 
-  const OID = 'ba106603-ca56-424d-a82d-564cde853c6b';
-  const OR = 'os_v2_app_xiigma6kkzbe3kbnkzgn5bj4nm5gps6pk5ke2snnpux4zia5ifldy2ojrs3ybz3sjn4toiqgjkycyy2izzbhxgjs7pt564fhlnkfh6i';
+  const OID = process.env.ONESIGNAL_APP_ID;
+  const OR = process.env.ONESIGNAL_REST_KEY;
 
   try {
     const body = {
