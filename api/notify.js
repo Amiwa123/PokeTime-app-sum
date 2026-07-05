@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Key ${OR}`
+        'Authorization': `Bearer ${OR}`
       },
       body: JSON.stringify(body)
     });
