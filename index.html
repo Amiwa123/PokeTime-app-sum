@@ -397,7 +397,7 @@ const OID='ba106603-ca56-424d-a82d-564cde853c6b';
 const H={'Content-Type':'application/json','apikey':SK,'Authorization':`Bearer ${SK}`};
 
 window.OneSignalDeferred=window.OneSignalDeferred||[];
-OneSignalDeferred.push(async O=>{await O.init({appId:OID,notifyButton:{enable:false},allowLocalhostAsSecureOrigin:true});await O.Notifications.requestPermission();});
+OneSignalDeferred.push(async O=>{await O.init({appId:OID,serviceWorkerParam:{scope:'/'},serviceWorkerPath:'/OneSignalSDKWorker.js',notifyButton:{enable:false},allowLocalhostAsSecureOrigin:true});const permission=await O.Notifications.permission;if(!permission){await O.Notifications.requestPermission();}});
 async function getPID(){try{return await window.OneSignal?.User?.PushSubscription?.id||null;}catch{return null;}}
 async function sbGet(t,q=''){const r=await fetch(`${SB}/rest/v1/${t}?${q}`,{headers:H});if(!r.ok)throw new Error(await r.text());return r.json();}
 async function sbPost(t,d){const r=await fetch(`${SB}/rest/v1/${t}`,{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(d)});if(!r.ok)throw new Error(await r.text());return r.json();}
